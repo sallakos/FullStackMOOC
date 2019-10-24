@@ -2,12 +2,23 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const generateRandom = max => Math.floor(Math.random() * max)
+const indexOfMax = array => array.indexOf(Math.max(...array)) // Toimii, kun ei ole kovin montaa anekdoottia.
 
-const Anecdote = ({ anecdote }) => <p>{anecdote}</p>
+const Anecdote = ({ title, anecdote, votes }) => (
+    <>
+        <h1>{title}</h1>
+        <p>{anecdote}</p>
+        <Vote votes={votes} />
+    </>
+)
 
 const Vote = ({ votes }) => <p>has {votes} votes</p>
 
-const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+const Button = ({ onClick, text, disabled }) => (
+    <button onClick={onClick} disabled={disabled}>
+        {text}
+    </button>
+)
 
 const App = (props) => {
 
@@ -29,15 +40,13 @@ const App = (props) => {
         setVotes(points) // Asetetaan tilaan uudet arvot
     }
 
-    console.log(selected)
-
     // Toistaiseksi useaan kertaan äänestäminen on täysin mahdollista.
     return (
         <div>
-            <Anecdote anecdote={anecdotes[selected]} />
-            <Vote votes={votes[selected]} />
-            <Button onClick={() => setVote(selected)} text="vote" />
-            <Button onClick={() => setToSelected()} text="next anecdote" />
+            <Anecdote title="Anecdote of the day" anecdote={anecdotes[selected]} votes={votes[selected]} />
+            <Button onClick={() => setVote(selected)} text="vote" disabled={false} />
+            <Button onClick={() => setToSelected()} text="next anecdote" disabled={false} />
+            <Anecdote title="Anecdote with most votes" anecdote={anecdotes[indexOfMax(votes)]} votes={votes[indexOfMax(votes)]} />
         </div>
     )
 
