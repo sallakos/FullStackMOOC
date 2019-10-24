@@ -1,7 +1,13 @@
 import React from 'react'
 
-const Total = (props) => (
-    <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
-)
+const Total = ({ parts }) => {
+
+  const exercises = parts.map(part => part.exercises)
+  const sum = exercises.reduce((a, b) => a + b, 0)
+
+  return (
+    <p><strong>Number of exercises {sum}</strong></p>
+  )
+}
 
 export default Total

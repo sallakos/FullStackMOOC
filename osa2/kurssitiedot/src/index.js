@@ -20,12 +20,12 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
-      }/*,
+      },
       {
         name: 'Add own part',
         exercises: 1,
         id: 4
-      }*/
+      }
     ]
   }
 
