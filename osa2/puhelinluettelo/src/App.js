@@ -19,7 +19,13 @@ const App = () => {
       name: newName
     }
 
-    setPersons(persons.concat(personObject))
+    // Mapataan persons-array pelkäksi nimi-arrayksi.
+    if (persons.map((persons) => persons.name).indexOf(newName) !== -1) {
+      alert(newName + " is already added to phonebook")
+    } else {
+      setPersons(persons.concat(personObject))
+    }
+
     setNewName('')
 
   }
@@ -29,7 +35,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
-          name: <input value={newName} onChange={handleNameChange} placeholder='new name'/>
+          name: <input value={newName} onChange={handleNameChange} placeholder='new name' />
         </div>
         <div>
           <button type="submit">add</button>
