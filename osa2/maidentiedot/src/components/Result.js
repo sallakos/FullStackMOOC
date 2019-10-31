@@ -8,6 +8,11 @@ const Result = ({ search, countries }) => {
     country.name.toLowerCase().includes(search.toLowerCase())
   )
 
+  const handleClick = (country) => () => (
+    console.log(country.name)
+    //<Country country={country} />
+  )
+
   const list = () => {
 
     if (countriesToShow.length > 10) {
@@ -23,7 +28,9 @@ const Result = ({ search, countries }) => {
     else {
       return (
         countriesToShow
-          .map(country => <Row key={country.cioc} text={country.name} />)
+          .map(country => <Row key={country.cioc}
+                               text={country.name}
+                               handleClick={handleClick(country)} />)
       )
     }
   }
