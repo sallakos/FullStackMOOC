@@ -14,9 +14,9 @@ const Content = ({ countriesToShow }) => {
 
   const rows = () => (
     countriesToShow.map(country =>
-      <Row key={country.cioc}
-        text={country.name}
-        handleClick={handleClick(country)} />
+      <Row key={country.name}
+           text={country.name}
+           handleClick={handleClick(country)} />
     )
   )
 
