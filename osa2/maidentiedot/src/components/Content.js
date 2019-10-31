@@ -1,24 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Row from './Row'
+import Country from './Country'
 
 const Content = ({ countriesToShow }) => {
 
-  const handleClick = (country) => () => (
-    console.log(country.name)
-    //<Country country={country} />
-  )
+  const [show, setShow] = useState(false)
+  const [country, setCountry] = useState(countriesToShow[0])
+
+  const handleClick = (country) => () => {
+    setShow(true)
+    setCountry(country)
+  }
 
   const rows = () => (
     countriesToShow.map(country =>
       <Row key={country.cioc}
-           text={country.name}
-           handleClick={handleClick(country)} />
+        text={country.name}
+        handleClick={handleClick(country)} />
     )
   )
 
-  return (
-    rows()
-  )
+  if (!show) {
+    return (
+      rows()
+    )
+  }
+  else {
+    return (
+      <div>
+        {rows()}
+        <Country country={country} />
+      </div>
+    )
+  }
 
 }
 
