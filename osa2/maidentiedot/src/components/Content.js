@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import Row from './Row'
 import Country from './Country'
 
 const Content = ({ countriesToShow }) => {
 
   const [show, setShow] = useState(false)
-  const [country, setCountry] = useState(countriesToShow[0])
+  const [country, setCountry] = useState(null)
 
   const handleClick = (country) => () => {
     setShow(true)
@@ -14,9 +13,10 @@ const Content = ({ countriesToShow }) => {
 
   const rows = () => (
     countriesToShow.map(country =>
-      <Row key={country.name}
-           text={country.name}
-           handleClick={handleClick(country)} />
+      <div key={country.name}>
+        {country.name}
+        <button onClick={handleClick(country)}>show</button>
+      </div>
     )
   )
 

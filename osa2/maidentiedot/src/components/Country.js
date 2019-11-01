@@ -1,5 +1,6 @@
 import React from 'react'
 import ListItem from './ListItem'
+import Weather from './Weather'
 
 const Country = ({ country }) => {
 
@@ -19,6 +20,7 @@ const Country = ({ country }) => {
         {languages}
       </ul>
       <img alt="Flag" src={country.flag} width="200px" />
+      <Weather country={country} />
     </div>
   )
 }

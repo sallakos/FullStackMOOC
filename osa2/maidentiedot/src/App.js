@@ -3,6 +3,8 @@ import axios from 'axios'
 import Search from './components/Search'
 import Result from './components/Result'
 
+// const API_KEY = "7bd9a2f6ec3eeb2aec479e9a748a15a8"
+
 const App = () => {
 
   const [countries, setCountries] = useState([])
@@ -17,6 +19,19 @@ const App = () => {
   }
 
   useEffect(hook, [])
+
+  // const [weather, setWeather] = useState([])
+  
+  // const weatherHook = ({ city }) => {
+  //   axios
+  //     .get(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=${city}`)
+  //     .then(response => {
+  //       setWeather(response.data)
+  //     })
+  // }
+
+  // // Kun pääkaupunki vaihtuu, päivitetään.
+  // useEffect(weatherHook, [country])
 
   const handleSearch = (event) => {
     setSearch(event.target.value)
