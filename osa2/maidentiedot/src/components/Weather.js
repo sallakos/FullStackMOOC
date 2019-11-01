@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const API_KEY = "7bd9a2f6ec3eeb2aec479e9a748a15a8"
+const API_KEY = process.env.REACT_APP_WEATHER_API_KEY
 
 const Weather = ({ country }) => {
 
