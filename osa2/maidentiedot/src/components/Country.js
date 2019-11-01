@@ -4,10 +4,12 @@ import Weather from './Weather'
 
 const Country = ({ country }) => {
 
+  // Listataan kielet.
   const languages = country.languages.map(language =>
     <ListItem key={language.iso639_2} text={language.name} />
   )
 
+  // Maan tiedot.
   return (
     <div>
       <h1>{country.name}</h1>
