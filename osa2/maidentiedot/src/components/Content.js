@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Country from './Country'
 
-const Content = ({ countriesToShow }) => {
+const Content = ({ search, countries }) => {
 
   const [show, setShow] = useState(false)
   const [country, setCountry] = useState(null)
@@ -10,6 +10,10 @@ const Content = ({ countriesToShow }) => {
     setShow(true)
     setCountry(country)
   }
+
+  const countriesToShow = countries.filter(country =>
+    country.name.toLowerCase().includes(search.toLowerCase())
+  )
 
   const rows = () => (
     countriesToShow.map(country =>
@@ -20,20 +24,31 @@ const Content = ({ countriesToShow }) => {
     )
   )
 
-  if (!show) {
+  if (countriesToShow.length > 10) {
     return (
-      rows()
+      <p>Too many matches, specify another filter</p>
+    )
+  }
+  else if (countriesToShow.length === 1) {
+    return (
+      <Country country={countriesToShow[0]} />
     )
   }
   else {
-    return (
-      <div>
-        {rows()}
-        <Country country={country} />
-      </div>
-    )
+    if (!show) {
+      return (
+        rows()
+      )
+    }
+    else {
+      return (
+        <div>
+          {rows()}
+          <Country country={country} />
+        </div>
+      )
+    }
   }
-
 }
 
 export default Content
