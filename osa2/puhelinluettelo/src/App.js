@@ -39,23 +39,19 @@ const App = () => {
       number: newNumber
     }
 
-    contactService
-
-      .create(personObject)
-      .then(returnedPerson => {
-
-        // Mapataan persons-array pelkäksi nimi-arrayksi.
-        if (persons.map((persons) => persons.name).indexOf(newName) !== -1) {
-          alert(`${newName} is already added to phonebook`)
-        } else {
+    // Mapataan persons-array pelkäksi nimi-arrayksi.
+    if (persons.map(persons => persons.name.trim().toLowerCase())
+      .indexOf(newName.trim().toLowerCase()) !== -1) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      contactService
+        .create(personObject)
+        .then(returnedPerson => {
           setPersons(persons.concat(personObject))
-        }
-
-        setNewName('')
-        setNewNumber('')
-
-      })
-
+          setNewName('')
+          setNewNumber('')
+        })
+    }
   }
 
   return (
