@@ -1,15 +1,21 @@
 import React from 'react'
 
-const Message = ({ message }) => {
+const Message = ({ message, error }) => {
+
+  let color = 'green'
+
+  if (error) {
+    color = 'red'
+  }
 
   const messageStyle = {
-    color: 'green',
+    color: color,
     background: 'lightgrey',
     fontSize: 20,
     borderStyle: 'solid',
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10
+    marginBottom: 20
   }
 
   if (message === null) {

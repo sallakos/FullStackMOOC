@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [message, setMessage] = useState(null)
+  const [error, setError] = useState(false)
 
   // Aluksi haetaan olemassa olevat numerot.
   useEffect(() => {
@@ -36,6 +37,16 @@ const App = () => {
   // Sama haulle (kts. yllä).
   const handleSearch = (event) => {
     setSearch(event.target.value)
+  }
+
+  // Ilmoituksen tulostaminen
+  const showMessage = (message, isError) => {
+    setError(isError)
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null)
+      setError(false)
+    }, 3000)
   }
 
   // Lisätään henkilö.
@@ -76,10 +87,11 @@ const App = () => {
             )
             setNewName('')
             setNewNumber('')
-            setMessage(`Updated ${newName}`)
-            setTimeout(() => {
-              setMessage(null)
-            }, 3000)
+            showMessage(`Updated ${newName}`, false)
+          })
+          .catch(error => {
+            setPersons(persons.filter(person => person.id !== personToEdit.id))
+            showMessage(`Information of ${newName} has been removed from the server`, true)
           })
       }
 
@@ -87,13 +99,12 @@ const App = () => {
       contactService
         .create(personObject)
         .then(returnedPerson => {
+          // Kahdesta selaimesta lisääminen onnistuu yhä.
+          // Tätä ei kuitenkaan kai tarvinnut korjata.
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
-          setMessage(`Added ${newName}`)
-          setTimeout(() => {
-            setMessage(null)
-          }, 3000)
+          showMessage(`Added ${newName}`, false)
         })
     }
   }
@@ -106,10 +117,11 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
-          setMessage(`Removed ${personToRemove.name}`)
-            setTimeout(() => {
-              setMessage(null)
-            }, 3000)
+          showMessage(`Removed ${personToRemove.name}`, false)
+        })
+        .catch(error => {
+          setPersons(persons.filter(person => person.id !== id))
+          showMessage(`Information of ${personToRemove.name} has already been removed from the server`, true)
         })
     }
   }
@@ -118,7 +130,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>      
-      <Message message={message} />
+      <Message message={message} error={error} />
       <Filter search={search} handleSearch={handleSearch} />
       <h3>Add a new</h3>
       <PersonForm
