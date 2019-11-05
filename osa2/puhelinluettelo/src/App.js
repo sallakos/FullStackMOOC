@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Content from './components/Content'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Message from './components/Message'
 import contactService from './services/contacts'
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState(null)
 
   // Aluksi haetaan olemassa olevat numerot.
   useEffect(() => {
@@ -72,6 +74,12 @@ const App = () => {
             setPersons(persons.map(person =>
               person.id !== personToEdit.id ? person : returnedPerson)
             )
+            setNewName('')
+            setNewNumber('')
+            setMessage(`Updated ${newName}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
           })
       }
 
@@ -82,6 +90,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setMessage(`Added ${newName}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
         })
     }
   }
@@ -94,6 +106,10 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+          setMessage(`Removed ${personToRemove.name}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
         })
     }
   }
@@ -101,7 +117,8 @@ const App = () => {
   // Renderöinti.
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2>Phonebook</h2>      
+      <Message message={message} />
       <Filter search={search} handleSearch={handleSearch} />
       <h3>Add a new</h3>
       <PersonForm
