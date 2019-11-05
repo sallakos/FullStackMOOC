@@ -47,12 +47,34 @@ const App = () => {
       number: newNumber
     }
 
+    const personNames = persons.map(persons =>
+      persons.name.trim().toLowerCase()
+    )
+
     // Mapataan persons-array pelkäksi nimi-arrayksi.
     // Jos nimi löytyy (poistetaan välilyönnit ja case sensitivity),
-    // ilmoitetaan asiasta. Jos ei, lisätään osoitekirjaan.
-    if (persons.map(persons => persons.name.trim().toLowerCase())
-      .indexOf(newName.trim().toLowerCase()) !== -1) {
-      alert(`${newName} is already added to phonebook`)
+    // kysytään halutaanko vaihtaa numero. Muuten lisätään nimi.
+    if (personNames.indexOf(newName.trim().toLowerCase()) !== -1) {
+
+      if (window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`)
+      ) {
+        // Jos numero halutaan vaihtaa, etsitään listasta muutettava henkilö.
+        const personToEdit = persons.find(person =>
+          person.name.trim().toLowerCase() === newName.trim().toLowerCase()
+        )
+        // Kopioidaan muutos ja vaihdetaan numero.
+        const changedPerson = { ...personToEdit, number: newNumber }
+        // Päivitetään muutos.
+        contactService
+          .update(changedPerson.id, changedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person =>
+              person.id !== personToEdit.id ? person : returnedPerson)
+            )
+          })
+      }
+
     } else {
       contactService
         .create(personObject)

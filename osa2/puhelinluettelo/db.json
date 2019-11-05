@@ -2,7 +2,7 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "040-123456",
+      "number": "050-123456",
       "id": 1
     },
     {
@@ -19,6 +19,16 @@
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": 5
+    },
+    {
+      "name": "Salla Koskinen",
+      "number": "050-1234567",
+      "id": 6
+    },
+    {
+      "name": "Mikki Hiiri",
+      "number": "050-9876543",
+      "id": 7
     }
   ]
 }
