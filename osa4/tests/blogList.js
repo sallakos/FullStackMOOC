@@ -84,6 +84,13 @@ const blogsWithNoLikes = [
     likes: 2,
     __v: 0,
   },
+  {
+    _id: '5a422a851b54a672334d17f7',
+    title: 'Something Else',
+    author: 'Michael Chan',
+    url: 'https://something.com/',
+    __v: 0,
+  },
 ]
 
 const emptyList = []
