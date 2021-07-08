@@ -29,6 +29,27 @@ test('blogs identified by id', async () => {
   response.body.forEach((item) => expect(item.id).toBeDefined())
 })
 
+test('blogs can be added', async () => {
+  const newBlog = {
+    title: 'A whole new blog',
+    author: 'Author New',
+    url: 'http://google.com',
+    likes: 10,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const titles = blogsAtEnd.map((blog) => blog.title)
+  expect(titles).toContain('A whole new blog')
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
