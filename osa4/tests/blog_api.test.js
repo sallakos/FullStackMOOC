@@ -71,6 +71,38 @@ test('new blog with no likes get 0 likes', async () => {
   expect(addedBlog.likes).toEqual(0)
 })
 
+test('new blog with no author cannot be added', async () => {
+  const newBlog = {
+    title: 'A blog with no author',
+    url: 'http://facebook.com',
+  }
+
+  await api.post('/api/blogs').send(newBlog).expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+  const addedBlog = _.find(blogsAtEnd, { title: 'A blog with no author' })
+  expect(addedBlog).toBeUndefined()
+})
+
+test('new blog with no title cannot be added', async () => {
+  const newBlog = {
+    author: "He Who Hasn't Named His Blog",
+    url: 'http://facebook.com',
+  }
+
+  await api.post('/api/blogs').send(newBlog).expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+  const addedBlog = _.find(blogsAtEnd, {
+    author: "He Who Hasn't Named His Blog",
+  })
+  expect(addedBlog).toBeUndefined()
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
