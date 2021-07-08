@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const _ = require('lodash')
 const app = require('../app')
 
 const api = supertest(app)
@@ -48,6 +49,26 @@ test('blogs can be added', async () => {
 
   const titles = blogsAtEnd.map((blog) => blog.title)
   expect(titles).toContain('A whole new blog')
+})
+
+test('new blog with no likes get 0 likes', async () => {
+  const newBlog = {
+    title: 'A blog with no likes',
+    author: 'Author New',
+    url: 'http://facebook.com',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const addedBlog = _.find(blogsAtEnd, { title: 'A blog with no likes' })
+  expect(addedBlog.likes).toEqual(0)
 })
 
 afterAll(() => {
