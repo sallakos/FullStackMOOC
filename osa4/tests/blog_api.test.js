@@ -135,6 +135,36 @@ describe('deletion of a blog', () => {
   })
 })
 
+describe('editing a blog', () => {
+  test('editing of existing blog succeeds', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToEdit = blogsAtStart[0]
+
+    const newParams = { author: 'Michael Chan-Lee', likes: 23 }
+
+    await api.put(`/api/blogs/${blogToEdit.id}`).send(newParams).expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+    const authors = blogsAtEnd.map((blog) => blog.author)
+    expect(authors).toContain('Michael Chan-Lee')
+
+    const editedBlog = _.find(blogsAtEnd, {
+      author: 'Michael Chan-Lee',
+    })
+
+    expect(editedBlog.likes).toEqual(23)
+  })
+
+  test('fails with status code 400 if id is invalid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToEdit = blogsAtStart[0]
+
+    await api.delete(`/api/blogs/${blogToEdit.id}${_.random(20)}`).expect(400)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
