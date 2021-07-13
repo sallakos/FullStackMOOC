@@ -2,15 +2,25 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const _ = require('lodash')
 const app = require('../app')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
+const jwt = require('jsonwebtoken')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('sekret', 10)
+  const user = new User({ username: 'root', name: 'Superuser', passwordHash })
+
+  await user.save()
 })
 
 describe('data is valid', () => {
@@ -41,8 +51,16 @@ describe('addition of a new blog', () => {
       likes: 10,
     }
 
+    const usersAtStart = await helper.usersInDb()
+    const user = usersAtStart[0]
+
+    const userForToken = { username: user.username, id: user.id }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -61,8 +79,16 @@ describe('addition of a new blog', () => {
       url: 'http://facebook.com',
     }
 
+    const usersAtStart = await helper.usersInDb()
+    const user = usersAtStart[0]
+
+    const userForToken = { username: user.username, id: user.id }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -80,7 +106,18 @@ describe('addition of a new blog', () => {
       url: 'http://facebook.com',
     }
 
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    const usersAtStart = await helper.usersInDb()
+    const user = usersAtStart[0]
+
+    const userForToken = { username: user.username, id: user.id }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
+      .send(newBlog)
+      .expect(400)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
@@ -95,7 +132,18 @@ describe('addition of a new blog', () => {
       url: 'http://facebook.com',
     }
 
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    const usersAtStart = await helper.usersInDb()
+    const user = usersAtStart[0]
+
+    const userForToken = { username: user.username, id: user.id }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
+      .send(newBlog)
+      .expect(400)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
@@ -104,6 +152,20 @@ describe('addition of a new blog', () => {
       author: "He Who Hasn't Named His Blog",
     })
     expect(addedBlog).toBeUndefined()
+  })
+
+  test('new blog cannot be added without a token', async () => {
+    const newBlog = {
+      title: 'A whole new blog',
+      author: 'Author New',
+      url: 'http://google.com',
+      likes: 10,
+    }
+
+    await api.post('/api/blogs').send(newBlog).expect(401)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
 })
 
