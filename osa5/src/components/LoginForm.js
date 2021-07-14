@@ -13,6 +13,7 @@ const LoginForm = ({ setUser }) => {
         username,
         password,
       })
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
