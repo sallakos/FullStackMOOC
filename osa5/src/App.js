@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
+import Notification from './components/Notification'
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [type, setType] = useState('')
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -15,10 +18,20 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} type={type} />
       {user ? (
-        <BlogList user={user} setUser={setUser} />
+        <BlogList
+          user={user}
+          setUser={setUser}
+          setMessage={setMessage}
+          setType={setType}
+        />
       ) : (
-        <LoginForm setUser={setUser} />
+        <LoginForm
+          setUser={setUser}
+          setMessage={setMessage}
+          setType={setType}
+        />
       )}
     </div>
   )

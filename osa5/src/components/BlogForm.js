@@ -1,18 +1,31 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const BlogForm = ({ setBlogs }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+const BlogForm = ({ setBlogs, setMessage, setType }) => {
+  const [title, setTitle] = useState(null)
+  const [author, setAuthor] = useState(null)
+  const [url, setUrl] = useState(null)
 
   const handleCreate = async (e) => {
     e.preventDefault()
-    await blogService.create({ title, author, url })
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    try {
+      await blogService.create({ title, author, url })
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setMessage(`a new blog ${title} by ${author} added`)
+      blogService.getAll().then((blogs) => setBlogs(blogs))
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setMessage("oops, something wen't wrong while creating a new blog")
+      setType('error')
+      setTimeout(() => {
+        setMessage(null)
+        setType(null)
+      }, 5000)
+    }
   }
 
   return (
@@ -21,7 +34,7 @@ const BlogForm = ({ setBlogs }) => {
         title:{' '}
         <input
           type="text"
-          value={title}
+          value={title || ''}
           name="Title"
           onChange={({ target }) => setTitle(target.value)}
         />
@@ -30,7 +43,7 @@ const BlogForm = ({ setBlogs }) => {
         author:{' '}
         <input
           type="text"
-          value={author}
+          value={author || ''}
           name="Author"
           onChange={({ target }) => setAuthor(target.value)}
         />
@@ -38,8 +51,8 @@ const BlogForm = ({ setBlogs }) => {
       <div>
         url:{' '}
         <input
-          type="text"
-          value={url}
+          type="url"
+          value={url || ''}
           name="Url"
           onChange={({ target }) => setUrl(target.value)}
         />

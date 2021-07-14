@@ -3,7 +3,7 @@ import Blog from './Blog'
 import blogService from '../services/blogs'
 import BlogForm from './BlogForm'
 
-const BlogList = ({ user, setUser }) => {
+const BlogList = ({ user, setUser, setMessage, setType }) => {
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const BlogList = ({ user, setUser }) => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <h2>create new</h2>
-      <BlogForm setBlogs={setBlogs} />
+      <BlogForm setBlogs={setBlogs} setMessage={setMessage} setType={setType} />
       <br />
       <br />
       {blogs.map((blog) => (
