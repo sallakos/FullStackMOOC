@@ -13,7 +13,7 @@ const Blog = ({ loggedUser, blog, handleDelete }) => {
       url,
       author,
       likes: blogLikes + 1,
-      user: user?.id || null,
+      user: user ? user.id : null,
     })
     setBlogLikes(blogLikes + 1)
   }
@@ -30,7 +30,7 @@ const Blog = ({ loggedUser, blog, handleDelete }) => {
           likes {blogLikes} <button onClick={handleLike}>like</button>
         </div>
         <div>{author}</div>
-        {loggedUser.username === blog.user?.username ? (
+        {blog.user && loggedUser.username === blog.user.username ? (
           <button onClick={() => handleDelete(blog)}>remove</button>
         ) : null}
       </div>
