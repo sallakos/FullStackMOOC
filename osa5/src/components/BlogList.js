@@ -18,6 +18,26 @@ const BlogList = ({ user, setUser, setMessage, setType }) => {
     setUser(null)
   }
 
+  const handleDelete = async (blog) => {
+    try {
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+        await blogService.remove(blog.id)
+        blogService.getAll().then((blogs) => setBlogs(blogs))
+        setMessage(`blog ${blog.title} by ${blog.author} deleted`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      }
+    } catch (exception) {
+      setMessage("oops, something wen't wrong while trying to delete blog")
+      setType('error')
+      setTimeout(() => {
+        setMessage(null)
+        setType(null)
+      }, 5000)
+    }
+  }
+
   return (
     <>
       <h2>blogs</h2>
@@ -38,7 +58,12 @@ const BlogList = ({ user, setUser, setMessage, setType }) => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog
+            key={blog.id}
+            loggedUser={user}
+            blog={blog}
+            handleDelete={handleDelete}
+          />
         ))}
     </>
   )
