@@ -19,12 +19,18 @@ const Blog = ({ loggedUser, blog, handleDelete }) => {
   }
 
   return (
-    <div style={{ border: 'solid 2px black', padding: '5px', margin: '5px 0' }}>
+    <div
+      style={{ border: 'solid 2px black', padding: '5px', margin: '5px 0' }}
+      className="blog"
+    >
       {title}, {author}{' '}
       <button onClick={() => setShowDetails(!showDetails)}>
         {showDetails ? 'hide' : 'view'}
       </button>
-      <div style={{ display: showDetails ? 'block' : 'none' }}>
+      <div
+        style={{ display: showDetails ? 'block' : 'none' }}
+        className="blogDetails"
+      >
         <div>{url || null}</div>
         <div>
           likes {blogLikes} <button onClick={handleLike}>like</button>
@@ -39,7 +45,6 @@ const Blog = ({ loggedUser, blog, handleDelete }) => {
 }
 
 Blog.propTypes = {
-  loggedUser: PropTypes.object.isRequired,
   blog: PropTypes.object.isRequired,
 }
 
