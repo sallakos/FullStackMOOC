@@ -13,8 +13,10 @@ describe('Blog', () => {
     likes: 5,
   }
 
+  const mockLike = jest.fn()
+
   beforeEach(() => {
-    component = render(<Blog blog={blog} />)
+    component = render(<Blog blog={blog} handleLike={mockLike} />)
   })
 
   test('renders title', () => {
@@ -36,5 +38,13 @@ describe('Blog', () => {
 
     const div = component.container.querySelector('.blogDetails')
     expect(div).not.toHaveStyle('display: none')
+  })
+
+  test('clicking the like button twice calls event handler twice', () => {
+    const button = component.getByText('like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+
+    expect(mockLike.mock.calls).toHaveLength(2)
   })
 })

@@ -18,6 +18,17 @@ const BlogList = ({ user, setUser, setMessage, setType }) => {
     setUser(null)
   }
 
+  const handleLike = async (blog) => {
+    await blogService.update(blog.id, {
+      title: blog.title,
+      url: blog.url,
+      author: blog.author,
+      likes: blog.likes + 1,
+      user: blog.user ? blog.user.id : null,
+    })
+    blogService.getAll().then((blogs) => setBlogs(blogs))
+  }
+
   const handleDelete = async (blog) => {
     try {
       if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
@@ -62,6 +73,7 @@ const BlogList = ({ user, setUser, setMessage, setType }) => {
             key={blog.id}
             loggedUser={user}
             blog={blog}
+            handleLike={handleLike}
             handleDelete={handleDelete}
           />
         ))}

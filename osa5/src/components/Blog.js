@@ -1,22 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs'
 
-const Blog = ({ loggedUser, blog, handleDelete }) => {
-  const { id, title, url, author, likes, user } = blog
+const Blog = ({ loggedUser, blog, handleLike, handleDelete }) => {
+  const { title, url, author, likes, user } = blog
   const [showDetails, setShowDetails] = useState(false)
-  const [blogLikes, setBlogLikes] = useState(likes || 0)
-
-  const handleLike = async () => {
-    await blogService.update(id, {
-      title,
-      url,
-      author,
-      likes: blogLikes + 1,
-      user: user ? user.id : null,
-    })
-    setBlogLikes(blogLikes + 1)
-  }
 
   return (
     <div
@@ -33,7 +20,7 @@ const Blog = ({ loggedUser, blog, handleDelete }) => {
       >
         <div>{url || null}</div>
         <div>
-          likes {blogLikes} <button onClick={handleLike}>like</button>
+          likes {likes} <button onClick={() => handleLike(blog)}>like</button>
         </div>
         <div>{user && user.name}</div>
         {user && loggedUser.username === blog.user.username ? (
