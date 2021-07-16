@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 describe('Blog', () => {
@@ -28,5 +28,13 @@ describe('Blog', () => {
   test('at start the hidden data is not displayed', () => {
     const div = component.container.querySelector('.blogDetails')
     expect(div).toHaveStyle('display: none')
+  })
+
+  test('after clicking the button, the hidden data is displayed', () => {
+    const button = component.getByText('view')
+    fireEvent.click(button)
+
+    const div = component.container.querySelector('.blogDetails')
+    expect(div).not.toHaveStyle('display: none')
   })
 })
