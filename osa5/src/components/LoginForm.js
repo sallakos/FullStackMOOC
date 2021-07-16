@@ -36,6 +36,7 @@ const LoginForm = ({ setUser, setMessage, setType }) => {
         <div>
           username:{' '}
           <input
+            id="username"
             type="text"
             value={username}
             name="Username"
@@ -45,6 +46,7 @@ const LoginForm = ({ setUser, setMessage, setType }) => {
         <div>
           password:{' '}
           <input
+            id="password"
             type="password"
             value={password}
             name="Password"
