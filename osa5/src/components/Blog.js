@@ -10,7 +10,9 @@ const Blog = ({ loggedUser, blog, handleLike, handleDelete }) => {
       style={{ border: 'solid 2px black', padding: '5px', margin: '5px 0' }}
       className="blog"
     >
-      {title}, {author}{' '}
+      <span className="blogCred">
+        {title}, {author}
+      </span>{' '}
       <button onClick={() => setShowDetails(!showDetails)}>
         {showDetails ? 'hide' : 'view'}
       </button>

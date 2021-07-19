@@ -53,5 +53,13 @@ describe('Blog app', function () {
       cy.contains('like').click()
       cy.contains('likes 2').click()
     })
+
+    it('A blog can be deleted', function () {
+      cy.addBlog()
+      cy.contains('A new blog, Author von New')
+      cy.contains('view').click()
+      cy.contains('remove').click()
+      cy.get('.blogCred').should('not.exist')
+    })
   })
 })
