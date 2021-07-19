@@ -13,6 +13,11 @@ const getAll = () => {
 }
 
 const create = async (newBlog) => {
+  if (!token) {
+    const user = localStorage.getItem('loggedUser')
+    token = `bearer ${JSON.parse(user).token}` || null
+  }
+
   const config = {
     headers: { Authorization: token },
   }
