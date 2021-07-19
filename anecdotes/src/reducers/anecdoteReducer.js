@@ -53,6 +53,16 @@ export const initializeAnecdotes = () => {
   }
 }
 
-export const voteAnecdote = (id) => ({ type: 'VOTE', data: { id } })
+export const voteAnecdote = (id) => {
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll()
+    const anecdoteToVote = anecdotes.find((a) => a.id === id)
+    await anecdoteService.update({
+      ...anecdoteToVote,
+      votes: anecdoteToVote.votes + 1,
+    })
+    dispatch({ type: 'VOTE', data: { id } })
+  }
+}
 
 export default reducer
