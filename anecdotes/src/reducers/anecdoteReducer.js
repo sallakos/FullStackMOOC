@@ -33,10 +33,15 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const addAnecdote = (content) => ({
-  type: 'ADD_NEW',
-  data: asObject(content),
-})
+export const addAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.createNew(asObject(content))
+    dispatch({
+      type: 'ADD_NEW',
+      data: newAnecdote,
+    })
+  }
+}
 
 export const initializeAnecdotes = () => {
   return async (dispatch) => {
