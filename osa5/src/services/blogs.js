@@ -27,6 +27,11 @@ const create = async (newBlog) => {
 }
 
 const update = async (id, newBlog) => {
+  if (!token) {
+    const user = localStorage.getItem('loggedUser')
+    token = `bearer ${JSON.parse(user).token}` || null
+  }
+
   const config = { headers: { Authorization: token } }
 
   const response = await axios.put(`${baseUrl}/${id}`, newBlog, config)
@@ -34,6 +39,11 @@ const update = async (id, newBlog) => {
 }
 
 const remove = async (id) => {
+  if (!token) {
+    const user = localStorage.getItem('loggedUser')
+    token = `bearer ${JSON.parse(user).token}` || null
+  }
+
   const config = { headers: { Authorization: token } }
 
   const response = await axios.delete(`${baseUrl}/${id}`, config)

@@ -43,5 +43,15 @@ describe('Blog app', function () {
       cy.get('.notification').contains(`a new blog ${title} by ${author} added`)
       cy.contains(`${title}, ${author}`)
     })
+
+    it('A blog can be liked', function () {
+      cy.addBlog()
+      cy.contains('view').click()
+      cy.contains('likes 0').click()
+      cy.contains('like').click()
+      cy.contains('likes 1').click()
+      cy.contains('like').click()
+      cy.contains('likes 2').click()
+    })
   })
 })
