@@ -8,8 +8,10 @@ const Notification = () => {
     border: 'solid',
     padding: 10,
     borderWidth: 1,
+    marginBottom: '20px',
+    display: notification.visible ? 'block' : 'none',
   }
-  return <div style={style}>{notification}</div>
+  return <div style={style}>{notification.content}</div>
 }
 
 export default Notification
