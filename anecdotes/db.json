@@ -32,13 +32,18 @@
     },
     {
       "content": "this is a new one",
-      "likes": 0,
-      "id": "E3WqNk8"
+      "id": "E3WqNk8",
+      "votes": 0
     },
     {
       "content": "another new one",
-      "likes": 0,
-      "id": "2Ob-zSW"
+      "id": "2Ob-zSW",
+      "votes": 0
+    },
+    {
+      "content": "third new one",
+      "votes": 0,
+      "id": "LGII18C"
     }
   ]
 }
