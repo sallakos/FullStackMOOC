@@ -13,7 +13,10 @@ const Blog = ({ loggedUser, blog, handleLike, handleDelete }) => {
       <span className="blogCred">
         {title}, {author}
       </span>{' '}
-      <button onClick={() => setShowDetails(!showDetails)}>
+      <button
+        className="showDetails"
+        onClick={() => setShowDetails(!showDetails)}
+      >
         {showDetails ? 'hide' : 'view'}
       </button>
       <div
@@ -22,7 +25,10 @@ const Blog = ({ loggedUser, blog, handleLike, handleDelete }) => {
       >
         <div>{url || null}</div>
         <div>
-          likes {likes} <button onClick={() => handleLike(blog)}>like</button>
+          likes {likes}{' '}
+          <button className="like" onClick={() => handleLike(blog)}>
+            like
+          </button>
         </div>
         <div>{user && user.name}</div>
         {user && loggedUser.username === blog.user.username ? (

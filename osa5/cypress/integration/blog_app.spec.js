@@ -45,7 +45,7 @@ describe('Blog app', function () {
     })
 
     it('A blog can be liked', function () {
-      cy.addBlog()
+      cy.addBlog({ title: 'A new blog', author: 'Author von New' })
       cy.contains('view').click()
       cy.contains('likes 0').click()
       cy.contains('like').click()
@@ -55,11 +55,52 @@ describe('Blog app', function () {
     })
 
     it('A blog can be deleted', function () {
-      cy.addBlog()
+      cy.addBlog({ title: 'A new blog', author: 'Author von New' })
       cy.contains('A new blog, Author von New')
       cy.contains('view').click()
       cy.contains('remove').click()
       cy.get('.blogCred').should('not.exist')
+    })
+  })
+
+  describe('Blogs are ordered correctly', function () {
+    beforeEach(function () {
+      cy.login({ username: 'sale', password: 'sala' })
+      cy.addBlog({ title: 'A new blog', author: 'Author von New' })
+      cy.addBlog({ title: 'A blog to like', author: 'Author von New' })
+      cy.addBlog({ title: 'A blog not to like', author: 'Author von New' })
+      cy.visit('http://localhost:3000')
+    })
+
+    it('Blogs are ordered', function () {
+      cy.contains('A new blog, Author von New')
+      cy.contains('A blog to like, Author von New')
+      cy.contains('A blog not to like, Author von New')
+
+      cy.get('.showDetails').click({ multiple: true })
+
+      cy.contains('A new blog, Author von New')
+        .parent()
+        .find('button.like')
+        .as('newBlogLikeButton')
+
+      cy.contains('A blog to like, Author von New')
+        .parent()
+        .find('button.like')
+        .as('blogToLikeButton')
+
+      cy.get('@newBlogLikeButton').click()
+      cy.contains('A new blog, Author von New').parent().contains('likes 1')
+      cy.get('@blogToLikeButton').click()
+      cy.contains('A blog to like, Author von New').parent().contains('likes 1')
+      cy.get('@blogToLikeButton').click()
+      cy.contains('A blog to like, Author von New').parent().contains('likes 2')
+      cy.get('@blogToLikeButton').click()
+      cy.contains('A blog to like, Author von New').parent().contains('likes 3')
+
+      cy.get('.blog').eq(0).contains('A blog to like, Author von New')
+      cy.get('.blog').eq(1).contains('A new blog, Author von New')
+      cy.get('.blog').eq(2).contains('A blog not to like, Author von New')
     })
   })
 })

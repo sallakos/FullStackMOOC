@@ -20,11 +20,11 @@ Cypress.Commands.add('addUser', () => {
   cy.request('POST', 'http://localhost:3003/api/users/', user)
 })
 
-Cypress.Commands.add('addBlog', () => {
+Cypress.Commands.add('addBlog', ({ title, author, url }) => {
   const blog = {
-    title: 'A new blog',
-    author: 'Author von New',
-    url: 'https://google.com',
+    title,
+    author,
+    url,
   }
   cy.request({
     method: 'POST',
