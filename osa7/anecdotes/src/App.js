@@ -109,6 +109,9 @@ const CreateNew = (props) => {
     props.setNotification(`a new anecdote '${content.value}' created!`)
   }
 
+  const handleReset = () =>
+    [content, author, info].forEach((field) => field.reset())
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -126,6 +129,9 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button type="button" onClick={handleReset}>
+          reset
+        </button>
       </form>
     </div>
   )
