@@ -43,12 +43,12 @@ const App = () => {
     : null
 
   return (
-    <div>
+    <div className="container">
       <Notification message={message} type={type} />
       {user ? (
         <>
           <Menu name={user.name} handleLogout={handleLogout} />
-          <h2>blog app</h2>
+          <h1>Blog app</h1>
           <Switch>
             <Route path="/users/:id">
               <User user={userToShow} />

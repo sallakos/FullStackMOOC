@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
-// import blogService from '../services/blogs'
 import BlogForm from './BlogForm'
 import Togglable from './Togglable'
 
@@ -9,7 +8,6 @@ const BlogList = ({ blogs, setBlogs, setMessage, setType }) => {
 
   return (
     <>
-      <h2>create new</h2>
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm
           setBlogs={setBlogs}

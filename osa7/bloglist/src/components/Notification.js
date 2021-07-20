@@ -1,18 +1,7 @@
 import React from 'react'
+import { Alert } from 'react-bootstrap'
 
 const Notification = ({ message, type }) =>
-  message ? (
-    <div
-      className="notification"
-      style={{
-        border: `solid 3px ${type === 'error' ? 'red' : 'green'}`,
-        padding: '10px',
-        borderRadius: '5px',
-        background: 'lightgrey',
-      }}
-    >
-      {message}
-    </div>
-  ) : null
+  message ? <Alert variant={type}>{message}</Alert> : null
 
 export default Notification

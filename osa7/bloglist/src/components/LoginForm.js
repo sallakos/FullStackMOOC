@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Button, Form } from 'react-bootstrap'
 import blogService from '../services/blogs'
 import login from '../services/login'
 
@@ -21,7 +22,7 @@ const LoginForm = ({ setUser, setMessage, setType }) => {
       setPassword('')
     } catch (exception) {
       setMessage('wrong username or password')
-      setType('error')
+      setType('danger')
       setTimeout(() => {
         setMessage(null)
         setType(null)
@@ -32,29 +33,27 @@ const LoginForm = ({ setUser, setMessage, setType }) => {
   return (
     <>
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          username:{' '}
-          <input
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>username:</Form.Label>
+          <Form.Control
             id="username"
             type="text"
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          password:{' '}
-          <input
+          <Form.Label>password:</Form.Label>
+          <Form.Control
             id="password"
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button type="submit">login</button>
-      </form>
+          <Button type="submit">login</Button>
+        </Form.Group>
+      </Form>
     </>
   )
 }

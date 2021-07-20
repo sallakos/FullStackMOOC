@@ -1,4 +1,6 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
+import styled from 'styled-components'
 import blogService from '../services/blogs'
 
 const Blog = ({ loggedUser, blog, setBlogs, setMessage, setType }) => {
@@ -25,16 +27,18 @@ const Blog = ({ loggedUser, blog, setBlogs, setMessage, setType }) => {
         await blogService.remove(blog.id)
         blogService.getAll().then((blogs) => setBlogs(blogs))
         setMessage(`blog ${blog.title} by ${blog.author} deleted`)
+        setType('success')
         setTimeout(() => {
           setMessage(null)
+          setType('primary')
         }, 5000)
       }
     } catch (exception) {
       setMessage("oops, something wen't wrong while trying to delete blog")
-      setType('error')
+      setType('danger')
       setTimeout(() => {
         setMessage(null)
-        setType(null)
+        setType('primary')
       }, 5000)
     }
   }
@@ -44,7 +48,7 @@ const Blog = ({ loggedUser, blog, setBlogs, setMessage, setType }) => {
       <h2>
         {title}, {author}
       </h2>
-      <div className="blogDetails">
+      <Container className="blogDetails">
         {url ? (
           <div>
             <a href={url}>{url}</a>
@@ -52,17 +56,25 @@ const Blog = ({ loggedUser, blog, setBlogs, setMessage, setType }) => {
         ) : null}
         <div>
           likes {likes}{' '}
-          <button className="like" onClick={() => handleLike(blog)}>
+          <Button size="sm" className="like" onClick={() => handleLike(blog)}>
             like
-          </button>
+          </Button>
         </div>
         {user && user.name ? <div>added by {user.name}</div> : null}
         {user && loggedUser.username === blog.user.username ? (
-          <button onClick={() => handleDelete(blog)}>remove</button>
+          <Button variant="danger" size="sm" onClick={() => handleDelete(blog)}>
+            remove
+          </Button>
         ) : null}
-      </div>
+      </Container>
     </div>
   )
 }
+
+const Container = styled.div`
+  border: solid 2px;
+  border-radius: 4px;
+  padding: 10px;
+`
 
 export default Blog

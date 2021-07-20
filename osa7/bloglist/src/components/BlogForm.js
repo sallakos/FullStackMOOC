@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Button, Form } from 'react-bootstrap'
 import blogService from '../services/blogs'
 
 const BlogForm = ({ setBlogs, setMessage, setType, blogFormRef }) => {
@@ -15,56 +16,54 @@ const BlogForm = ({ setBlogs, setMessage, setType, blogFormRef }) => {
       setAuthor('')
       setUrl('')
       setMessage(`a new blog ${title} by ${author} added`)
+      setType('success')
       blogService.getAll().then((blogs) => setBlogs(blogs))
       setTimeout(() => {
         setMessage(null)
+        setType('primary')
       }, 5000)
     } catch (exception) {
       setMessage("oops, something wen't wrong while creating a new blog")
-      setType('error')
+      setType('danger')
       setTimeout(() => {
         setMessage(null)
-        setType(null)
+        setType('primary')
       }, 5000)
     }
   }
 
   return (
-    <form onSubmit={handleCreate}>
-      <div>
-        title:{' '}
-        <input
+    <Form onSubmit={handleCreate}>
+      <Form.Group>
+        <Form.Label>title:</Form.Label>
+        <Form.Control
           id="title"
           type="text"
           value={title || ''}
           name="Title"
           onChange={({ target }) => setTitle(target.value)}
         />
-      </div>
-      <div>
-        author:{' '}
-        <input
+        <Form.Label>author:</Form.Label>
+        <Form.Control
           id="author"
           type="text"
           value={author || ''}
           name="Author"
           onChange={({ target }) => setAuthor(target.value)}
         />
-      </div>
-      <div>
-        url:{' '}
-        <input
+        <Form.Label>url:</Form.Label>
+        <Form.Control
           id="url"
           type="url"
           value={url || ''}
           name="Url"
           onChange={({ target }) => setUrl(target.value)}
         />
-      </div>
-      <button id="create" type="submit">
-        create
-      </button>
-    </form>
+        <Button id="create" type="submit">
+          Create
+        </Button>
+      </Form.Group>
+    </Form>
   )
 }
 
