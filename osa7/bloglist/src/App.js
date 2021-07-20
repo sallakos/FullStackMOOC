@@ -6,15 +6,19 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import { User } from './components/User'
 import userService from './services/users'
+import blogService from './services/blogs'
+import Blog from './components/Blog'
 
 const App = () => {
   const [users, setUsers] = useState([])
+  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [type, setType] = useState('')
 
   useEffect(() => {
     userService.getAll().then((users) => setUsers(users))
+    blogService.getAll().then((blogs) => setBlogs(blogs))
 
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -28,8 +32,14 @@ const App = () => {
     setUser(null)
   }
 
-  const match = useRouteMatch('/users/:id')
-  const userToShow = match ? users.find((u) => u.id === match.params.id) : null
+  const userRouteMatch = useRouteMatch('/users/:id')
+  const blogRouteMatch = useRouteMatch('/blogs/:id')
+  const userToShow = userRouteMatch
+    ? users.find((u) => u.id === userRouteMatch.params.id)
+    : null
+  const blogToShow = blogRouteMatch
+    ? blogs.find((b) => b.id === blogRouteMatch.params.id)
+    : null
 
   return (
     <div>
@@ -47,8 +57,19 @@ const App = () => {
             <Route path="/users">
               <UserList users={users} />
             </Route>
+            <Route path="/blogs/:id">
+              <Blog
+                loggedUser={user}
+                blog={blogToShow}
+                setBlogs={setBlogs}
+                setMessage={setMessage}
+                setType={setType}
+              />
+            </Route>
             <Route path="/">
               <BlogList
+                blogs={blogs}
+                setBlogs={setBlogs}
                 user={user}
                 setUser={setUser}
                 setMessage={setMessage}
