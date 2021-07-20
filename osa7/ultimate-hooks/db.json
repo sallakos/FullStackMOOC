@@ -7,6 +7,14 @@
     {
       "content": "the best featrure ever <3",
       "id": 2
+    },
+    {
+      "content": "a new note here",
+      "id": 3
+    },
+    {
+      "content": "another new note",
+      "id": 4
     }
   ],
   "persons": [
@@ -19,6 +27,16 @@
       "name": "kaltsoon",
       "number": "045-2323456",
       "id": 2
+    },
+    {
+      "name": "someone new",
+      "number": "020202",
+      "id": 3
+    },
+    {
+      "name": "peter pan",
+      "number": "0100100",
+      "id": 4
     }
   ]
 }
