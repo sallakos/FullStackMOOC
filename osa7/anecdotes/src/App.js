@@ -93,9 +93,9 @@ const Footer = () => (
 const CreateNew = (props) => {
   const history = useHistory()
 
-  const content = useField('content')
-  const author = useField('author')
-  const info = useField('info')
+  const { reset: resetContent, ...content } = useField('content')
+  const { reset: resetAuthor, ...author } = useField('author')
+  const { reset: resetInfo, ...info } = useField('info')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -109,8 +109,11 @@ const CreateNew = (props) => {
     props.setNotification(`a new anecdote '${content.value}' created!`)
   }
 
-  const handleReset = () =>
-    [content, author, info].forEach((field) => field.reset())
+  const handleReset = () => {
+    resetContent()
+    resetAuthor()
+    resetInfo()
+  }
 
   return (
     <div>
