@@ -8,6 +8,7 @@ import { User } from './components/User'
 import userService from './services/users'
 import blogService from './services/blogs'
 import Blog from './components/Blog'
+import { Menu } from './components/Menu'
 
 const App = () => {
   const [users, setUsers] = useState([])
@@ -46,10 +47,8 @@ const App = () => {
       <Notification message={message} type={type} />
       {user ? (
         <>
-          <h2>blogs</h2>
-          <p>
-            {user.name} logged in <button onClick={handleLogout}>logout</button>
-          </p>
+          <Menu name={user.name} handleLogout={handleLogout} />
+          <h2>blog app</h2>
           <Switch>
             <Route path="/users/:id">
               <User user={userToShow} />
