@@ -1,10 +1,12 @@
 const initialState = { content: '', visible: false }
+let timeoutID
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
       return action.data
     case 'HIDE_NOTIFICATION':
+      timeoutID = undefined
       return { content: '', visible: false }
     default:
       return state
@@ -14,11 +16,14 @@ const reducer = (state = initialState, action) => {
 export const setNotification = (content, time) => {
   return async (dispatch) => {
     await content
+    if (timeoutID) {
+      clearTimeout(timeoutID)
+    }
     dispatch({
       type: 'SET_NOTIFICATION',
       data: { content, visible: true },
     })
-    setTimeout(() => {
+    timeoutID = setTimeout(() => {
       dispatch({
         type: 'HIDE_NOTIFICATION',
       })
