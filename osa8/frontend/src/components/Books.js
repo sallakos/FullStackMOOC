@@ -1,10 +1,12 @@
+import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
-import React, { useState } from 'react'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
   const [genre, setGenre] = useState(null)
   const result = useQuery(ALL_BOOKS)
+
+  useEffect(() => setGenre(props.favoriteGenre), [props.favoriteGenre])
 
   if (!props.show) {
     return null
@@ -13,12 +15,14 @@ const Books = (props) => {
   const books = result?.data?.allBooks
   const genres = Array.from(new Set(books?.map((b) => b.genres).flat()))
 
+  // Kun käyttäjä kirjautuu sisään, hänelle näytetään lempigenrensä kirjat. Tehtävä poikkeaa hiukan mallista, mutta toiminnallisuus löytyy kuitenkin.
   return (
     <div>
       <h2>books</h2>
       {genre ? (
         <div>
-          in genre <strong>{genre}</strong>
+          in {genre === props.favoriteGenre ? 'your favorite ' : null}genre{' '}
+          <strong>{genre}</strong>
         </div>
       ) : null}
       {result.loading ? (
