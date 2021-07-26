@@ -1,60 +1,74 @@
 import React, { useEffect, useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { useLazyQuery } from '@apollo/client'
+import { ALL_BOOKS_BY_GENRE } from '../queries'
 
 const Books = (props) => {
   const [genre, setGenre] = useState(null)
-  const result = useQuery(ALL_BOOKS)
+  const [genres, setGenres] = useState([])
+  const [getBooks, booksByGenre] = useLazyQuery(ALL_BOOKS_BY_GENRE)
 
-  useEffect(() => setGenre(props.favoriteGenre), [props.favoriteGenre])
+  const showBooksByGenre = (genre) => {
+    setGenre(genre)
+    genre ? getBooks({ variables: { genre } }) : getBooks()
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => showBooksByGenre(null), [])
+
+  useEffect(() => {
+    if (!genre) {
+      setGenres(
+        Array.from(
+          new Set(booksByGenre.data?.allBooks?.map((b) => b.genres).flat())
+        )
+      )
+    }
+  }, [genre, booksByGenre])
 
   if (!props.show) {
     return null
   }
 
-  const books = result?.data?.allBooks
-  const genres = Array.from(new Set(books?.map((b) => b.genres).flat()))
+  const books = booksByGenre?.data?.allBooks
 
-  // Kun käyttäjä kirjautuu sisään, hänelle näytetään lempigenrensä kirjat. Tehtävä poikkeaa hiukan mallista, mutta toiminnallisuus löytyy kuitenkin.
   return (
     <div>
       <h2>books</h2>
       {genre ? (
         <div>
-          in {genre === props.favoriteGenre ? 'your favorite ' : null}genre{' '}
-          <strong>{genre}</strong>
+          in genre <strong>{genre}</strong>
         </div>
       ) : null}
-      {result.loading ? (
+      {booksByGenre.loading ? (
         <div>loading...</div>
       ) : (
-        <>
-          <table>
-            <tbody>
-              <tr>
-                <th></th>
-                <th>author</th>
-                <th>published</th>
+        <table>
+          <tbody>
+            <tr>
+              <th></th>
+              <th>author</th>
+              <th>published</th>
+            </tr>
+            {books.map((b) => (
+              <tr key={b.title}>
+                <td>{b.title}</td>
+                <td>{b.author.name}</td>
+                <td>{b.published}</td>
               </tr>
-              {books
-                .filter((b) => (genre ? b.genres.includes(genre) : true))
-                .map((b) => (
-                  <tr key={b.title}>
-                    <td>{b.title}</td>
-                    <td>{b.author.name}</td>
-                    <td>{b.published}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
+      )}
+      {genres.length > 0 ? (
+        <>
           {genres.map((genre) => (
-            <button key={genre} onClick={() => setGenre(genre)}>
+            <button key={genre} onClick={() => showBooksByGenre(genre)}>
               {genre}
             </button>
           ))}
-          <button onClick={() => setGenre(null)}>all genres</button>
+          <button onClick={() => showBooksByGenre(null)}>all genres</button>
         </>
-      )}
+      ) : null}
     </div>
   )
 }
