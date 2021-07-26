@@ -1,4 +1,4 @@
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
@@ -7,6 +7,7 @@ import NewBook from './components/NewBook'
 import { Notification } from './components/Notification'
 import Recommendations from './components/Recommendations'
 import { USER } from './queries'
+import { BOOK_ADDED } from './subscriptions'
 
 const App = () => {
   const user = useQuery(USER, { pollInterval: 500 })
@@ -30,6 +31,15 @@ const App = () => {
       setFavoriteGenre(user.data.me.favoriteGenre)
     }
   }, [user.data])
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const book = subscriptionData.data.bookAdded
+      // Käytetään ilmoittamiseen errorMessagea, tyylittelyt saavat tällä kertaa jäädä
+      setErrorMessage(`new book ${book.title} by ${book.author.name} added!`)
+      setTimeout(() => setErrorMessage(''), 5000)
+    },
+  })
 
   const logout = () => {
     setToken(null)
